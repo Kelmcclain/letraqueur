@@ -10,7 +10,6 @@ import {
   doc,
   updateDoc,
   serverTimestamp,
-  addDoc
 } from "../services/firebase";
 import { initializeUserData } from "../services/user";
 import type { User } from "firebase/auth";

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { db, addDoc, collection, doc, updateDoc, serverTimestamp } from '../services/firebase';
+import { db, addDoc, collection, doc, serverTimestamp } from '../services/firebase';
 
 export default function RecordForm() {
   const { user } = useApp();

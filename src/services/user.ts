@@ -1,9 +1,7 @@
 import { 
-    auth,
     db,
     doc,
     setDoc,
-    collection,
     serverTimestamp
   } from './firebase';
   import type { User } from 'firebase/auth';
@@ -24,7 +22,3 @@ import {
     }
   };
   
-  export const getUserData = async (userId: string) => {
-    // Add any additional user data fetching logic here
-    return null;
-  };

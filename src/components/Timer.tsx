@@ -1,4 +1,3 @@
-import React from 'react';
 import { Clock, AlertTriangle } from 'lucide-react';
 import { useTimer } from '../hooks/useTimer';
 

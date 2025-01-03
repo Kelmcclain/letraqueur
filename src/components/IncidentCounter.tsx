@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useApp } from "../context/AppContext";
 import { useTimer } from "../hooks/useTimer";
 import { Plus, Minus, RotateCcw, AlertTriangle, Loader2 } from "lucide-react";
@@ -14,15 +14,17 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export default function IncidentCounter() {
-  const { incidentCount, incrementCount, decrementCount, resetCount, isCountLoading } =
+  const { incidentCount, incrementCount, decrementCount, resetCount, loading } =
     useApp();
   const { startTimer, resetTimer } = useTimer();
   const [showResetDialog, setShowResetDialog] = useState(false);
-  const [lastAction, setLastAction] = useState<"increment" | "decrement" | null>(null);
+  const [lastAction, setLastAction] = useState<
+    "increment" | "decrement" | null
+  >(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleIncrement = async () => {
-    if (isUpdating || incidentCount === null) return;
+    if (isUpdating || loading || incidentCount === null) return;
     setIsUpdating(true);
     try {
       await incrementCount();
@@ -39,7 +41,7 @@ export default function IncidentCounter() {
   };
 
   const handleDecrement = async () => {
-    if (isUpdating || incidentCount === null || incidentCount <= 0) return;
+    if (isUpdating || loading || incidentCount === null || incidentCount <= 0) return;
     setIsUpdating(true);
     try {
       await decrementCount();
@@ -56,7 +58,7 @@ export default function IncidentCounter() {
   };
 
   const handleReset = async () => {
-    if (isUpdating || incidentCount === null) return;
+    if (isUpdating || loading || incidentCount === null) return;
     setIsUpdating(true);
     try {
       await resetCount();
@@ -75,26 +77,28 @@ export default function IncidentCounter() {
         <h3 className="text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">
           Incident Counter
         </h3>
-        <div className="relative">
-          <div className="text-4xl sm:text-5xl font-bold text-center mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 text-transparent bg-clip-text">
-            {isCountLoading ? (
-              <Loader2 className="w-12 h-12 animate-spin mx-auto text-blue-600 dark:text-blue-400" />
-            ) : (
-              incidentCount
-            )}
-          </div>
-          <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">
-            Total Incidents
-          </div>
+        <div className="relative min-h-[80px] flex items-center justify-center">
+          {loading ? (
+            <Loader2 className="w-8 h-8 animate-spin text-blue-600 dark:text-blue-400" />
+          ) : (
+            <>
+              <div className="text-4xl sm:text-5xl font-bold text-center mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 text-transparent bg-clip-text">
+                {incidentCount ?? 0}
+              </div>
+              <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center absolute -bottom-6">
+                Total Incidents
+              </div>
 
-          {!isCountLoading && lastAction && (
-            <div
-              className={`absolute -right-1 sm:-right-2 -top-1 sm:-top-2 text-sm sm:text-base ${
-                lastAction === "increment" ? "text-red-500" : "text-green-500"
-              } animate-bounce-once`}
-            >
-              {lastAction === "increment" ? "+1" : "-1"}
-            </div>
+              {lastAction && (
+                <div
+                  className={`absolute -right-1 sm:-right-2 -top-1 sm:-top-2 text-sm sm:text-base ${
+                    lastAction === "increment" ? "text-red-500" : "text-green-500"
+                  } animate-bounce-once`}
+                >
+                  {lastAction === "increment" ? "+1" : "-1"}
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -105,7 +109,7 @@ export default function IncidentCounter() {
           <button
             id="incrementBtn"
             onClick={handleIncrement}
-            disabled={isUpdating || isCountLoading || incidentCount === null}
+            disabled={isUpdating || loading || incidentCount === null}
             className="flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 
               hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg text-sm sm:text-base font-medium transition-all duration-200 
               transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
@@ -117,7 +121,7 @@ export default function IncidentCounter() {
           <button
             id="decrementBtn"
             onClick={handleDecrement}
-            disabled={isUpdating || isCountLoading || incidentCount === null || incidentCount === 0}
+            disabled={isUpdating || loading || incidentCount === null || incidentCount === 0}
             className="flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 bg-gray-600 hover:bg-gray-700 
               text-white rounded-lg text-sm sm:text-base font-medium transition-all duration-200 transform hover:scale-105 
               active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
@@ -129,7 +133,7 @@ export default function IncidentCounter() {
 
         <button
           onClick={() => setShowResetDialog(true)}
-          disabled={isUpdating || isCountLoading || incidentCount === null}
+          disabled={isUpdating || loading || incidentCount === null}
           className="w-full flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 bg-red-600 hover:bg-red-700 
             text-white rounded-lg text-sm sm:text-base font-medium transition-all duration-200 transform hover:scale-105 
             active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"

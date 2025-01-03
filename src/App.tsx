@@ -1,4 +1,3 @@
-import React from "react";
 import { AppProvider } from "./context/AppContext";
 import Header from "./components/Header";
 import Timer from "./components/Timer";
