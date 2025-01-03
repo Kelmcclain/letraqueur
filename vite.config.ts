@@ -4,7 +4,7 @@ import path from "path"
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: "/incident-counter",
+  base: "/letraque",
   plugins: [react()],
   resolve: {
     alias: {
