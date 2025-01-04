@@ -57,7 +57,7 @@ export function TimerProvider({ children }: { children: React.ReactNode }) {
 
   const getColorForSeconds = (seconds: number) => {
     if (seconds < 60) return 'text-green-500 dark:text-green-400';
-    if (seconds < 120) return 'text-white dark:text-blue';
+    if (seconds < 120) return 'text-blue dark:text-blue';
     if (seconds < 180) return 'text-orange-500 dark:text-orange-400';
     if (seconds < 240) return 'text-orange-700 dark:text-orange-600';
     return 'text-red-500 dark:text-red-400';
