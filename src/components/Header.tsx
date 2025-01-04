@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { auth, signOut } from '../services/firebase';
 import { User, LogOut } from 'lucide-react';
@@ -33,14 +34,15 @@ export default function Header() {
             </button>
 
             {showPopup && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                <button
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 animate-fadeIn">
+                <Link
+                  to="/letraque/account"
                   className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
                   onClick={() => setShowPopup(false)}
                 >
                   <User className="w-4 h-4" />
                   Account
-                </button>
+                </Link>
                 <button
                   className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
                   onClick={handleLogout}
