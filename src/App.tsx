@@ -9,7 +9,7 @@ import AuthPage from "./components/auth/AuthPage";
 import { useApp } from "./context/AppContext";
 
 function AppContent() {
-  const { loading, user, error } = useApp();
+  const { loading, user } = useApp();
 
   if (loading) {
     return <LoadingScreen />;
@@ -24,8 +24,8 @@ function AppContent() {
       <div className="min-h-screen flex flex-col bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         <Header />
         <Routes>
-          <Route path="/letraque" element={<MainDashboard />} />
-          <Route path="/letraque/account" element={<AccountPage />} />
+          <Route path="/letraqueur" element={<MainDashboard />} />
+          <Route path="/letraqueur/account" element={<AccountPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>

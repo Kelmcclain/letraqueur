@@ -36,7 +36,7 @@ export default function Header() {
             {showPopup && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 animate-fadeIn">
                 <Link
-                  to="/letraque/account"
+                  to="/letraqueur/account"
                   className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
                   onClick={() => setShowPopup(false)}
                 >

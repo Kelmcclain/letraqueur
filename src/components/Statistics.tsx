@@ -13,7 +13,12 @@ export default function Statistics() {
     return `${startDate.toLocaleDateString('en-US', options)} - ${endDate.toLocaleDateString('en-US', options)}`;
   };
 
-  const calculateWeeklyAverages = (data: any[]) => {
+  interface Record {
+    date: string;
+    incidentCount: number;
+  }
+
+  const calculateWeeklyAverages = (data: Record[]) => {
     if (!data.length) return [];
     
     const weeklyAverages = [];

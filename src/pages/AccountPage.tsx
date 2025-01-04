@@ -1,45 +1,86 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { User, Mail, Key, Trash2, AlertCircle, ArrowLeft, Save } from 'lucide-react';
-import { auth, db, updateDoc, doc, deleteDoc } from '../services/firebase';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  User,
+  Mail,
+  Key,
+  Trash2,
+  AlertCircle,
+  ArrowLeft,
+  Save,
+} from "lucide-react";
+import { db, updateDoc, doc, deleteDoc } from "../services/firebase";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useApp } from '../context/AppContext';
-import { Separator } from "@/components/ui/separator";
+import { useApp } from "../context/AppContext";
+import {
+  updateEmail,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  deleteUser,
+} from "firebase/auth";
 
 export default function AccountPage() {
   const navigate = useNavigate();
   const { user, setError } = useApp();
   const [loading, setLoading] = useState(false);
-  const [displayName, setDisplayName] = useState(user?.displayName || '');
-  const [email, setEmail] = useState(user?.email || '');
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+  const [displayName, setDisplayName] = useState(user?.displayName || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [deleteConfirm, setDeleteConfirm] = useState(false);
 
-  const handleUpdateProfile = async (e) => {
+  const handleUpdateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const userDocRef = doc(db, 'users', user.uid);
+      if (!user) {
+        throw new Error("User is not authenticated");
+      }
+
+      // First, reauthorize the user if they're updating sensitive information
+      if ((user.email !== email || newPassword) && currentPassword) {
+        const credential = EmailAuthProvider.credential(
+          user.email!,
+          currentPassword
+        );
+        await reauthenticateWithCredential(user, credential);
+      }
+
+      // Update displayName in Firestore
+      const userDocRef = doc(db, "users", user.uid);
       await updateDoc(userDocRef, {
         displayName: displayName,
       });
-      
+
+      // Update email if changed
       if (user.email !== email) {
-        await user.updateEmail(email);
+        await updateEmail(user, email);
       }
-      
+
+      // Update password if provided
       if (newPassword) {
-        await user.updatePassword(newPassword);
+        await updatePassword(user, newPassword);
       }
-      
-      setError('Profile updated successfully!');
-    } catch (error) {
-      setError(error.message);
+
+      setError("Profile updated successfully!");
+      setDeleteConfirm(false);
+    } catch (error: unknown) {
+      if ((error as { code?: string }).code === "auth/requires-recent-login") {
+        setError("Please re-enter your password to make these changes");
+      } else {
+        setError((error as Error).message);
+      }
     } finally {
       setLoading(false);
     }
@@ -51,18 +92,39 @@ export default function AccountPage() {
       return;
     }
     
+    if (!user) {
+      setError('User is not authenticated');
+      return;
+    }
+    
     setLoading(true);
     try {
+      // Reauthorize before deleting
+      if (currentPassword) {
+        const credential = EmailAuthProvider.credential(
+          user.email!,
+          currentPassword
+        );
+        await reauthenticateWithCredential(user, credential);
+      } else {
+        throw new Error('Please enter your current password to delete your account');
+      }
+  
       // Delete user data from Firestore
       await Promise.all([
         deleteDoc(doc(db, 'users', user.uid)),
         deleteDoc(doc(db, 'users', user.uid, 'incident_count', 'counter')),
       ]);
+      
       // Delete user account
-      await user.delete();
+      await deleteUser(user);
       navigate('/');
     } catch (error) {
-      setError(error.message);
+      if ((error as { code?: string }).code === 'auth/requires-recent-login') {
+        setError('Please re-enter your password to delete your account');
+      } else {
+        setError((error as Error).message);
+      }
     } finally {
       setLoading(false);
     }
@@ -82,7 +144,9 @@ export default function AccountPage() {
 
         <div className="max-w-2xl mx-auto space-y-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Account Settings</h1>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Account Settings
+            </h1>
             <p className="mt-2 text-gray-600 dark:text-gray-400">
               Manage your account settings and preferences
             </p>
@@ -178,7 +242,7 @@ export default function AccountPage() {
                 disabled={loading}
               >
                 <Trash2 className="w-4 h-4" />
-                {deleteConfirm ? 'Confirm Delete' : 'Delete Account'}
+                {deleteConfirm ? "Confirm Delete" : "Delete Account"}
               </Button>
 
               <Button
@@ -195,7 +259,8 @@ export default function AccountPage() {
               <Alert variant="destructive" className="animate-fadeIn mt-4">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  This action cannot be undone. All your data will be permanently deleted.
+                  This action cannot be undone. All your data will be
+                  permanently deleted.
                 </AlertDescription>
               </Alert>
             )}

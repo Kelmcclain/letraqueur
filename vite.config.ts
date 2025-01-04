@@ -4,7 +4,7 @@ import path from "path"
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: "/letraque",
+  base: "/letraqueur",
   plugins: [react()],
   resolve: {
     alias: {
