@@ -11,12 +11,13 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
 import { useToast } from '../hooks/use-toast';
 
 export default function Header() {
   const { user } = useApp();
-  const { theme, setTheme } = useTheme();
+  const themeContext = useTheme();
+  const theme = themeContext?.theme ?? 'light';
+  const setTheme = themeContext?.setTheme ?? (() => {});
   const { toast } = useToast();
 
   const handleLogout = async () => {
@@ -29,7 +30,7 @@ export default function Header() {
     } catch (error) {
       toast({
         title: "Error signing out",
-        description: error.message,
+        description: (error as Error).message,
         variant: "destructive",
         duration: 5000
       });

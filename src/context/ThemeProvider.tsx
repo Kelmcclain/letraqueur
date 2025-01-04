@@ -1,9 +1,11 @@
 // ThemeProvider.jsx
 import { createContext, useContext, useEffect, useState } from 'react';
 
-const ThemeContext = createContext({ theme: 'light', setTheme: (theme: string) => {} });
+const ThemeContext = createContext<{ theme: string; setTheme: (theme: string) => void } | undefined>(undefined);
 
-export function ThemeProvider({ children }) {
+import { ReactNode } from 'react';
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') || 'light';

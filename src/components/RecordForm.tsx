@@ -52,7 +52,7 @@ export default function RecordForm() {
       console.error('Error adding record:', error);
       toast({
         title: "Error adding record",
-        description: error.message,
+        description: (error as Error).message,
         variant: "destructive"
       });
     } finally {
