@@ -14,13 +14,10 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export default function IncidentCounter() {
-  const { incidentCount, incrementCount, decrementCount, resetCount, loading } =
-    useApp();
+  const { incidentCount, incrementCount, decrementCount, resetCount, loading } = useApp();
   const { startTimer, resetTimer } = useTimer();
   const [showResetDialog, setShowResetDialog] = useState(false);
-  const [lastAction, setLastAction] = useState<
-    "increment" | "decrement" | null
-  >(null);
+  const [lastAction, setLastAction] = useState<"increment" | "decrement" | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleIncrement = async () => {
@@ -30,7 +27,6 @@ export default function IncidentCounter() {
       await incrementCount();
       startTimer();
       setLastAction("increment");
-      // Trigger button animation
       const button = document.getElementById("incrementBtn");
       button?.classList.remove("animate-press");
       void button?.offsetWidth;
@@ -47,7 +43,6 @@ export default function IncidentCounter() {
       await decrementCount();
       startTimer();
       setLastAction("decrement");
-      // Trigger button animation
       const button = document.getElementById("decrementBtn");
       button?.classList.remove("animate-press");
       void button?.offsetWidth;
@@ -71,102 +66,124 @@ export default function IncidentCounter() {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 w-full max-w-md mx-auto transition-all duration-300">
-      {/* Counter Display */}
-      <div className="mb-6 sm:mb-8">
-        <h3 className="text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">
-          Incident Counter
-        </h3>
-        <div className="relative min-h-[80px] flex items-center justify-center">
-          {loading ? (
-            <Loader2 className="w-8 h-8 animate-spin text-blue-600 dark:text-blue-400" />
-          ) : (
-            <>
-              <div className="text-4xl sm:text-5xl font-bold text-center mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 text-transparent bg-clip-text">
-                {incidentCount ?? 0}
-              </div>
-              <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center absolute -bottom-6">
-                Total Incidents
-              </div>
+    <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-violet-500/10 to-indigo-500/10 border border-indigo-200/50 dark:border-indigo-800/50 shadow-xl backdrop-blur-xl">
+      <div className="absolute inset-0 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm" />
+      
+      <div className="relative p-6 space-y-8">
+        {/* Counter Display */}
+        <div>
+          <h3 className="text-lg font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+            Incident Counter
+          </h3>
+          <div className="relative min-h-[100px] flex items-center justify-center">
+            {loading ? (
+              <Loader2 className="w-10 h-10 animate-spin text-indigo-600 dark:text-indigo-400" />
+            ) : (
+              <>
+                <div className="relative">
+                  <div className="text-6xl font-bold text-center bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+                    {incidentCount ?? 0}
+                  </div>
+                  <div className="text-sm text-center text-indigo-600/70 dark:text-indigo-400/70 mt-2 font-medium">
+                    Total Incidents
+                  </div>
 
-              {lastAction && (
-                <div
-                  className={`absolute -right-1 sm:-right-2 -top-1 sm:-top-2 text-sm sm:text-base ${
-                    lastAction === "increment" ? "text-red-500" : "text-green-500"
-                  } animate-bounce-once`}
-                >
-                  {lastAction === "increment" ? "+1" : "-1"}
+                  {lastAction && (
+                    <div
+                      className={`absolute -right-4 -top-4 text-lg font-bold animate-bounce-once
+                        ${lastAction === "increment" 
+                          ? "bg-gradient-to-r from-rose-500 to-red-500" 
+                          : "bg-gradient-to-r from-emerald-500 to-green-500"} 
+                        bg-clip-text text-transparent`}
+                    >
+                      {lastAction === "increment" ? "+1" : "-1"}
+                    </div>
+                  )}
                 </div>
-              )}
-            </>
-          )}
+              </>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Control Buttons */}
-      <div className="space-y-3 sm:space-y-4">
-        <div className="grid grid-cols-2 gap-2 sm:gap-4">
-          <button
-            id="incrementBtn"
-            onClick={handleIncrement}
-            disabled={isUpdating || loading || incidentCount === null}
-            className="flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 
-              hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg text-sm sm:text-base font-medium transition-all duration-200 
-              transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
-          >
-            <Plus className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-180 transition-transform duration-300" />
-            <span>Add</span>
-          </button>
+        {/* Control Buttons */}
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <button
+              id="incrementBtn"
+              onClick={handleIncrement}
+              disabled={isUpdating || loading || incidentCount === null}
+              className="relative overflow-hidden group rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 
+                text-white font-medium px-6 py-3 hover:shadow-lg disabled:opacity-50 
+                transform hover:scale-105 active:scale-95 transition-all duration-200"
+            >
+              <div className="absolute inset-0 bg-white/20 group-hover:bg-white/30 transition-colors" />
+              <span className="relative flex items-center justify-center gap-2">
+                <Plus className="w-5 h-5 group-hover:rotate-180 transition-transform duration-300" />
+                Add
+              </span>
+            </button>
+
+            <button
+              id="decrementBtn"
+              onClick={handleDecrement}
+              disabled={isUpdating || loading || incidentCount === null || incidentCount === 0}
+              className="relative overflow-hidden group rounded-xl bg-gray-600 
+                text-white font-medium px-6 py-3 hover:shadow-lg disabled:opacity-50 
+                transform hover:scale-105 active:scale-95 transition-all duration-200"
+            >
+              <div className="absolute inset-0 bg-white/20 group-hover:bg-white/30 transition-colors" />
+              <span className="relative flex items-center justify-center gap-2">
+                <Minus className="w-5 h-5 group-hover:rotate-180 transition-transform duration-300" />
+                Remove
+              </span>
+            </button>
+          </div>
 
           <button
-            id="decrementBtn"
-            onClick={handleDecrement}
+            onClick={() => setShowResetDialog(true)}
             disabled={isUpdating || loading || incidentCount === null || incidentCount === 0}
-            className="flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 bg-gray-600 hover:bg-gray-700 
-              text-white rounded-lg text-sm sm:text-base font-medium transition-all duration-200 transform hover:scale-105 
-              active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
+            className="relative overflow-hidden group w-full rounded-xl bg-gradient-to-r from-rose-600 to-red-600 
+              text-white font-medium px-6 py-3 hover:shadow-lg disabled:opacity-50 
+              transform hover:scale-105 active:scale-95 transition-all duration-200"
           >
-            <Minus className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-180 transition-transform duration-300" />
-            <span>Remove</span>
+            <div className="absolute inset-0 bg-white/20 group-hover:bg-white/30 transition-colors" />
+            <span className="relative flex items-center justify-center gap-2">
+              <RotateCcw className="w-5 h-5 group-hover:rotate-180 transition-transform duration-300" />
+              Reset Counter
+            </span>
           </button>
         </div>
-
-        <button
-          onClick={() => setShowResetDialog(true)}
-          disabled={isUpdating || loading || incidentCount === null}
-          className="w-full flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 bg-red-600 hover:bg-red-700 
-            text-white rounded-lg text-sm sm:text-base font-medium transition-all duration-200 transform hover:scale-105 
-            active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
-        >
-          <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-180 transition-transform duration-300" />
-          <span>Reset Counter</span>
-        </button>
       </div>
 
       {/* Reset Confirmation Dialog */}
       <AlertDialog open={showResetDialog} onOpenChange={setShowResetDialog}>
-        <AlertDialogContent className="bg-white dark:bg-gray-800 border dark:border-gray-700 w-[95vw] max-w-md mx-auto">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2 text-red-600 dark:text-red-400 text-base sm:text-lg">
-              <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5" />
-              Reset Confirmation
-            </AlertDialogTitle>
-            <AlertDialogDescription className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-              This will reset the incident counter to zero and clear the timer.
-              This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="text-sm sm:text-base hover:bg-gray-100 dark:hover:bg-gray-700">
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleReset}
-              className="text-sm sm:text-base bg-red-600 hover:bg-red-700 text-white"
-            >
-              Reset
-            </AlertDialogAction>
-          </AlertDialogFooter>
+        <AlertDialogContent className="relative overflow-hidden rounded-2xl border border-indigo-200/50 dark:border-indigo-800/50">
+          <div className="absolute inset-0 bg-gradient-to-r from-violet-500/10 to-indigo-500/10 backdrop-blur-xl" />
+          <div className="relative">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="flex items-center gap-2 text-lg font-bold">
+                <AlertTriangle className="w-5 h-5 text-red-500" />
+                <span className="bg-gradient-to-r from-rose-600 to-red-600 bg-clip-text text-transparent">
+                  Reset Confirmation
+                </span>
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-base text-gray-600 dark:text-gray-400">
+                This will reset the incident counter to zero and clear the timer.
+                This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleReset}
+                className="rounded-xl bg-gradient-to-r from-rose-600 to-red-600 text-white hover:shadow-lg"
+              >
+                Reset
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </div>
         </AlertDialogContent>
       </AlertDialog>
     </div>

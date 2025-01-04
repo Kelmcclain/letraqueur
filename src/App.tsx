@@ -1,6 +1,10 @@
+
+// App.jsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider } from "./context/AppContext";
 import { TimerProvider } from "./hooks/useTimer";
+import { ThemeProvider } from "./context/ThemeProvider";
+import { Toaster } from '@/components/ui/toaster';
 import Header from "./components/Header";
 import AccountPage from "./pages/AccountPage";
 import MainDashboard from "./components/MainDashboard";
@@ -21,13 +25,15 @@ function AppContent() {
 
   return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="min-h-screen bg-background text-foreground">
         <Header />
-        <Routes>
-          <Route path="/letraqueur" element={<MainDashboard />} />
-          <Route path="/letraqueur/account" element={<AccountPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <main className="container py-6">
+          <Routes>
+            <Route path="/letraqueur" element={<MainDashboard />} />
+            <Route path="/letraqueur/account" element={<AccountPage />} />
+            <Route path="*" element={<Navigate to="/letraqueur" replace />} />
+          </Routes>
+        </main>
       </div>
     </Router>
   );
@@ -36,9 +42,12 @@ function AppContent() {
 export default function App() {
   return (
     <AppProvider>
-      <TimerProvider>
-        <AppContent />
-      </TimerProvider>
+      <ThemeProvider>
+        <TimerProvider>
+          <AppContent />
+          <Toaster />
+        </TimerProvider>
+      </ThemeProvider>
     </AppProvider>
   );
 }
