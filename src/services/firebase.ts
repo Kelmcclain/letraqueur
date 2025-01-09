@@ -21,7 +21,9 @@ import {
   onAuthStateChanged,
   signOut,
   signInWithPopup,
-  GoogleAuthProvider
+  GoogleAuthProvider,
+  sendPasswordResetEmail,
+  confirmPasswordReset
 } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -56,5 +58,7 @@ export {
   onAuthStateChanged,
   signOut,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  sendPasswordResetEmail,
+  confirmPasswordReset
 };

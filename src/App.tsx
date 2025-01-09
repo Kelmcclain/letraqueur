@@ -11,6 +11,7 @@ import MainDashboard from "./components/MainDashboard";
 import LoadingScreen from "./components/LoadingScreen";
 import AuthPage from "./components/auth/AuthPage";
 import { useApp } from "./context/AppContext";
+import ResetPasswordConfirmation from './components/auth/ResetPasswordConfirmation';
 
 function AppContent() {
   const { loading, user } = useApp();
@@ -32,6 +33,7 @@ function AppContent() {
             <Route path="/letraqueur" element={<MainDashboard />} />
             <Route path="/letraqueur/account" element={<AccountPage />} />
             <Route path="*" element={<Navigate to="/letraqueur" replace />} />
+            <Route path="/letraqueur/reset-password" element={<ResetPasswordConfirmation />} />
           </Routes>
         </main>
       </div>
