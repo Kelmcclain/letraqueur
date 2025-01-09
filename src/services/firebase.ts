@@ -13,6 +13,7 @@ import {
   updateDoc,
   deleteDoc,
   serverTimestamp,
+  getDoc
 } from 'firebase/firestore';
 import {
   getAuth,
@@ -60,5 +61,6 @@ export {
   GoogleAuthProvider,
   signInWithPopup,
   sendPasswordResetEmail,
-  confirmPasswordReset
+  confirmPasswordReset,
+  getDoc
 };
