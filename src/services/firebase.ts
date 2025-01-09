@@ -12,14 +12,16 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
-  serverTimestamp
+  serverTimestamp,
 } from 'firebase/firestore';
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  signOut
+  signOut,
+  signInWithPopup,
+  GoogleAuthProvider
 } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -52,5 +54,7 @@ export {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  signOut
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup
 };
