@@ -157,7 +157,7 @@ export default function IncidentCounter() {
 
       {/* Reset Confirmation Dialog */}
       <AlertDialog open={showResetDialog} onOpenChange={setShowResetDialog}>
-        <AlertDialogContent className="relative overflow-hidden rounded-2xl border border-indigo-200/50 dark:border-indigo-800/50">
+        <AlertDialogContent className="absolute overflow-hidden rounded-2xl border border-indigo-200/50 dark:border-indigo-800/50">
           <div className="absolute inset-0 bg-gradient-to-r from-violet-500/10 to-indigo-500/10 backdrop-blur-xl" />
           <div className="relative">
             <AlertDialogHeader>
