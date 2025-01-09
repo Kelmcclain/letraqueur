@@ -24,7 +24,8 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   sendPasswordResetEmail,
-  confirmPasswordReset
+  confirmPasswordReset,
+  
 } from 'firebase/auth';
 
 const firebaseConfig = {

@@ -3,6 +3,8 @@ import { auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, Googl
 import { Loader2, Mail, Lock, AlertCircle, ArrowLeft } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { FirebaseError } from 'firebase/app';
+
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -14,6 +16,40 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [formFocus, setFormFocus] = useState<string | null>(null);
 
+
+  type FirebaseErrorMessages = {
+    [key: string]: string;
+  };
+  
+  // Mapping of Firebase error codes to user-friendly messages
+  const firebaseErrors: FirebaseErrorMessages = {
+    'invalid-email': 'Please enter a valid email address.',
+    'user-disabled': 'This account has been disabled. Please contact support.',
+    'user-not-found': 'Invalid credentials.',
+    'wrong-password': 'Incorrect password. Please try again.',
+    'email-already-in-use': 'An account with this email already exists. Please log in instead.',
+    'operation-not-allowed': 'Email/password accounts are not enabled. Please contact support.',
+    'weak-password': 'Password should be at least 6 characters long.',
+    'too-many-requests': 'Too many failed attempts. Please try again later.',
+    'network-request-failed': 'Network error. Please check your internet connection.',
+    'internal-error': 'An internal error occurred. Please try again.',
+    'invalid-credential': 'Invalid login credentials. Please check your email and password.',
+    'account-exists-with-different-credential': 'An account already exists with a different sign-in method.',
+    'popup-closed-by-user': 'Sign-in popup was closed before completion.',
+    'cancelled-popup-request': 'Another sign-in popup is already open.',
+    'popup-blocked': 'Sign-in popup was blocked by the browser.',
+    'unauthorized-domain': 'This domain is not authorized for OAuth operations.',
+  };
+  
+  // Function to get user-friendly error message
+  const getErrorMessage = (error: unknown): string => {
+    if (error instanceof FirebaseError) {
+      const errorCode = error.code.replace('auth/', '');
+      return firebaseErrors[errorCode] || 'An unexpected error occurred. Please try again.';
+    }
+    return 'An unexpected error occurred. Please try again.';
+  };
+  
   const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
@@ -26,9 +62,8 @@ export default function AuthPage() {
         await createUserWithEmailAndPassword(auth, email, password);
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
-      const cleanError = errorMessage.replace('Firebase: ', '').replace('auth/', '');
-      setError(cleanError);
+      const errorMessage = getErrorMessage(err);
+      setError(errorMessage);
       setIsLoading(false);
     }
   };
@@ -47,9 +82,9 @@ export default function AuthPage() {
       await sendPasswordResetEmail(auth, email, actionCodeSettings);
       setResetSuccess(true);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
-      const cleanError = errorMessage.replace('Firebase: ', '').replace('auth/', '');
-      setError(cleanError);
+      const errorMessage = getErrorMessage(err);
+      setError(errorMessage);
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
@@ -63,9 +98,9 @@ export default function AuthPage() {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
-      const cleanError = errorMessage.replace('Firebase: ', '').replace('auth/', '');
-      setError(cleanError);
+      const errorMessage = getErrorMessage(err);
+      setError(errorMessage);
+      setIsLoading(false);
       setIsLoading(false);
     }
   };
