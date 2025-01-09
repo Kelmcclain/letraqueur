@@ -27,7 +27,7 @@ function AppContent() {
     <Router>
       <div className="min-h-screen bg-background text-foreground">
         <Header />
-        <main className="container py-6">
+        <main className="container">
           <Routes>
             <Route path="/letraqueur" element={<MainDashboard />} />
             <Route path="/letraqueur/account" element={<AccountPage />} />
