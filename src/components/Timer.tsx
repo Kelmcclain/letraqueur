@@ -163,7 +163,7 @@ export default function Timer() {
           <div className="mt-4 flex items-center justify-center space-x-2 px-4 py-2 rounded-xl bg-indigo-500/10 dark:bg-indigo-400/10 border border-indigo-500/20 dark:border-indigo-400/20">
             <History className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
             <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400">
-              Average Resolution: {averageTime}
+              Average Time: {averageTime}
             </span>
           </div>
 
