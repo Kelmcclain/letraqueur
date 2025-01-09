@@ -1,8 +1,15 @@
-import { Clock, AlertTriangle } from 'lucide-react';
+import React from 'react';
+import { Clock, AlertTriangle, History } from 'lucide-react';
 import { useTimer } from '../hooks/useTimer';
 
 export default function Timer() {
-  const { seconds, formatTime, getColorForSeconds } = useTimer();
+  const { 
+    seconds, 
+    formatTime, 
+    getColorForSeconds,
+    averageTime 
+  } = useTimer();
+  
   const progress = Math.min((seconds / 3600) * 100, 100);
 
   const size = {
@@ -150,6 +157,14 @@ export default function Timer() {
                 Since last incident
               </div>
             </div>
+          </div>
+
+          {/* Average Time Display */}
+          <div className="mt-4 flex items-center justify-center space-x-2 px-4 py-2 rounded-xl bg-indigo-500/10 dark:bg-indigo-400/10 border border-indigo-500/20 dark:border-indigo-400/20">
+            <History className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400">
+              Average Resolution: {averageTime}
+            </span>
           </div>
 
           {/* Warning indicator */}
