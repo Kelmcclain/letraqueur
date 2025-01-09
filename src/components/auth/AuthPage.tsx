@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { auth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from '../../services/firebase';
+import { auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from '../../services/firebase';
 import { Loader2, Mail, Lock, AlertCircle } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -8,9 +9,9 @@ export default function AuthPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [formFocus, setFormFocus] = useState<'email' | 'password' | null>(null);
+  const [formFocus, setFormFocus] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
@@ -21,6 +22,21 @@ export default function AuthPage() {
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
       }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      const cleanError = errorMessage.replace('Firebase: ', '').replace('auth/', '');
+      setError(cleanError);
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setError('');
+    setIsLoading(true);
+
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred';
       const cleanError = errorMessage.replace('Firebase: ', '').replace('auth/', '');
@@ -55,8 +71,33 @@ export default function AuthPage() {
             </div>
           )}
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Google Sign In Button */}
+          <button
+            type="button"
+            onClick={handleGoogleSignIn}
+            disabled={isLoading}
+            className="w-full py-3 px-4 mb-6 bg-white dark:bg-gray-900/50 border border-gray-200 
+              dark:border-gray-700 text-gray-800 dark:text-gray-200 rounded-lg font-medium 
+              transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] 
+              disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+          >
+            <img
+              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+              alt="Google"
+              className="w-5 h-5"
+            />
+            <span>Continue with Google</span>
+          </button>
+
+          <div className="relative my-6">
+            <Separator className="my-4" />
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 px-2">
+              <span className="text-sm text-gray-500 dark:text-gray-400">or</span>
+            </div>
+          </div>
+
+          {/* Email/Password Form */}
+          <form onSubmit={handleEmailSubmit} className="space-y-6">
             {/* Email Input */}
             <div className="relative">
               <div className={`absolute left-3 top-1/2 -translate-y-1/2 transition-colors duration-200 
@@ -120,7 +161,7 @@ export default function AuthPage() {
                   <span>Please wait...</span>
                 </>
               ) : (
-                <span>{isLogin ? 'Sign in' : 'Create account'}</span>
+                <span>{isLogin ? 'Sign in with email' : 'Create account'}</span>
               )}
             </button>
 
