@@ -68,6 +68,43 @@ export default function AuthPage() {
     }
   };
 
+  const LogoSection = () => (
+    <div className="text-center mb-8">
+      <div className="relative inline-block group cursor-pointer">
+        {/* Animated background element */}
+        <div className="w-16 h-16 bg-blue-600 rounded-2xl transform rotate-12 absolute top-0 left-1/2 -translate-x-1/2 -z-10 
+          opacity-20 transition-all duration-300 ease-in-out group-hover:scale-110 group-hover:rotate-45 group-hover:opacity-30 
+          animate-pulse" />
+        
+        <div className="flex flex-col items-center justify-center">
+          {/* Logo image with hover effect */}
+          <div className="relative overflow-hidden rounded-2xl mb-4 transition-transform duration-300 ease-in-out 
+            transform group-hover:scale-105 group-hover:shadow-lg">
+            <img 
+              src="https://firebasestorage.googleapis.com/v0/b/peak-suprstate-384109.appspot.com/o/public%2Flt1.jpeg?alt=media&token=9af95724-a6b9-48ab-adff-6224f12800a7"
+              alt="Le Traqueur Logo" 
+              className="w-16 h-16 object-cover transition-transform duration-300 ease-in-out transform group-hover:scale-110"
+            />
+            {/* Overlay effect on hover */}
+            <div className="absolute inset-0 bg-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          </div>
+          
+          {/* Text with hover effect */}
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 
+            dark:from-blue-400 dark:to-indigo-400 transition-all duration-300 transform group-hover:scale-105">
+            Le Traqueur
+          </h1>
+        </div>
+      </div>
+      <p className="mt-3 text-gray-600 dark:text-gray-400">
+        {isPasswordReset 
+          ? 'Reset your password to regain access'
+          : (isLogin ? 'Welcome back! Sign in to continue' : 'Create your account to get started')
+        }
+      </p>
+    </div>
+  );
+
   const handlePasswordReset = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
@@ -109,22 +146,9 @@ export default function AuthPage() {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
         <div className="w-full max-w-md px-4">
-          {/* Logo/Brand Section */}
-          <div className="text-center mb-8">
-            <div className="relative inline-block">
-              <div className="w-16 h-16 bg-blue-600 rounded-2xl transform rotate-12 absolute top-0 left-1/2 -translate-x-1/2 -z-10 animate-pulse opacity-20" />
-              <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
-                Le Traqueur
-              </h1>
-            </div>
-            <p className="mt-3 text-gray-600 dark:text-gray-400">
-              Reset your password to regain access
-            </p>
-          </div>
+          <LogoSection />
 
-          {/* Main Card */}
           <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl transition-all duration-300">
-            {/* Back to Login */}
             <button
               onClick={() => {
                 setIsPasswordReset(false);
@@ -146,7 +170,6 @@ export default function AuthPage() {
               </Alert>
             ) : (
               <>
-                {/* Error Display */}
                 {error && (
                   <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 rounded-lg flex items-center gap-3 animate-shake">
                     <AlertCircle className="w-5 h-5 text-red-500 dark:text-red-400" />
@@ -155,7 +178,6 @@ export default function AuthPage() {
                 )}
 
                 <form onSubmit={handlePasswordReset} className="space-y-6">
-                  {/* Email Input */}
                   <div className="relative">
                     <div className={`absolute left-3 top-1/2 -translate-y-1/2 transition-colors duration-200 
                       ${formFocus === 'email' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
@@ -178,7 +200,6 @@ export default function AuthPage() {
                     />
                   </div>
 
-                  {/* Submit Button */}
                   <button
                     type="submit"
                     disabled={isLoading}
@@ -212,22 +233,9 @@ export default function AuthPage() {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
       <div className="w-full max-w-md px-4">
-        {/* Logo/Brand Section */}
-        <div className="text-center mb-8">
-          <div className="relative inline-block">
-            <div className="w-16 h-16 bg-blue-600 rounded-2xl transform rotate-12 absolute top-0 left-1/2 -translate-x-1/2 -z-10 animate-pulse opacity-20" />
-            <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
-              Le Traqueur
-            </h1>
-          </div>
-          <p className="mt-3 text-gray-600 dark:text-gray-400">
-            {isLogin ? 'Welcome back! Sign in to continue' : 'Create your account to get started'}
-          </p>
-        </div>
+        <LogoSection />
 
-        {/* Main Card */}
         <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl transition-all duration-300">
-          {/* Error Display */}
           {error && (
             <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 rounded-lg flex items-center gap-3 animate-shake">
               <AlertCircle className="w-5 h-5 text-red-500 dark:text-red-400" />
@@ -235,7 +243,6 @@ export default function AuthPage() {
             </div>
           )}
 
-          {/* Google Sign In Button */}
           <button
             type="button"
             onClick={handleGoogleSignIn}
@@ -261,9 +268,7 @@ export default function AuthPage() {
             </div>
           </div>
 
-          {/* Email/Password Form */}
           <form onSubmit={handleEmailSubmit} className="space-y-6">
-            {/* Email Input */}
             <div className="relative">
               <div className={`absolute left-3 top-1/2 -translate-y-1/2 transition-colors duration-200 
                 ${formFocus === 'email' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
@@ -287,7 +292,6 @@ export default function AuthPage() {
               />
             </div>
 
-            {/* Password Input */}
             <div className="relative">
               <div className={`absolute left-3 top-1/2 -translate-y-1/2 transition-colors duration-200 
                 ${formFocus === 'password' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`}>
@@ -311,7 +315,6 @@ export default function AuthPage() {
               />
             </div>
 
-            {/* Forgot Password Link */}
             {isLogin && (
               <div className="flex justify-end">
                 <button
@@ -325,7 +328,6 @@ export default function AuthPage() {
               </div>
             )}
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
@@ -344,7 +346,6 @@ export default function AuthPage() {
               )}
             </button>
 
-            {/* Toggle Auth Mode */}
             <div className="text-center">
               <button
                 type="button"
