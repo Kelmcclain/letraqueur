@@ -55,7 +55,12 @@ export default function Header() {
             <div className="flex h-20 items-center justify-between">
               {/* Logo and user section with enhanced typography */}
               <div className="flex items-center space-x-6">
-                <div>
+                <div className="flex items-center space-x-3">
+                  <img 
+                    src="https://firebasestorage.googleapis.com/v0/b/peak-suprstate-384109.appspot.com/o/public%2Flt1.jpeg?alt=media&token=9af95724-a6b9-48ab-adff-6224f12800a7" 
+                    alt="Le Traqueur Logo" 
+                    className="w-10 h-10 rounded-lg object-cover"
+                  />
                   <h1 className="text-3xl font-extrabold tracking-tight">
                     <span className="bg-gradient-to-r from-violet-600 via-fuchsia-500 to-indigo-600 bg-clip-text text-transparent">
                       Le Traqueur
